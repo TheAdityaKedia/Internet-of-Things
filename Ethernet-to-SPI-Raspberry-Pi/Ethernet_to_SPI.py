@@ -8,6 +8,7 @@ Created on Wed Jun 15 10:06:42 2016
  
 import socket
 import wiringpi
+from time import ctime, sleep
  
 
 port =5623
@@ -22,12 +23,26 @@ s.listen(5)
  
 while True:
     conn, addr =s.accept()
-    print("connected to: ", addr)
+    to_write =  ctime()+" - connected to: "+ addr[0] + " on port "+str(addr[1])+"\n" 
+    with open('connection-log.txt', 'a+') as f:
+        f.write(to_write)
     talk=conn.recv(1024)
-    print("message from client:", talk)
-    print("writing to SPI")
+    to_write = ctime()+" - Message from client: \'"+ talk.decode() + "\'\n" 
+    with open('connection-log.txt', 'a+') as f:
+        f.write(to_write)
+        to_write = ctime()+" - Writing to SPI\n"
+        f.write(to_write)
     data = talk
     recv = wiringpi.wiringPiSPIDataRW(0, data)
-    print("SPI device says: ", recv)
+    to_write = ctime()+" - Received from SPI device: \'"+ str(recv)+ "\'\n" 
+    with open('connection-log.txt', 'a+') as f:
+        f.write(to_write)
+        to_write = ctime()+" - sending response to client: \'"+ str(recv)+ "\'\n"
+        f.write(to_write)
     conn.send(str(recv).encode())
     conn.send('End\n'.encode())
+    sleep(1)
+    conn.close()
+    to_write = ctime()+" - connection to "+ addr[0] + " closed\n"
+    with open('connection-log.txt', 'a+') as f:
+        f.write(to_write)
