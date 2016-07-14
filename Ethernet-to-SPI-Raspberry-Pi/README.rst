@@ -35,8 +35,7 @@ The server will accept the connection, read the IP address of the client, and sa
 logging file with a timestamp. Then it will read a byte string from the client, (maximum 1024
 bytes) and send it to the destination sensor or board via SPI. The data read from the device
 will be written to the TCP stream, and sent to the client, followed by the string "End\\n". The
-server relies on the client to close the connection. However, only a queue of 5 connections
-is accepted, so clients will be kicked out if the queue is full.
+Server then waits fro one second and then closes the connection with the client.
 
 Use This file as a starting point to design your own protocol for IoT communication.
 The major limitation of this server is the inability to maintain several connections at the
