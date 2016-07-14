@@ -34,7 +34,7 @@ Raspberry-Pi and listens on port 5623. Any suitable TCP client can connect to th
 The server will accept the connection, read the IP address of the client, and save them to a
 logging file with a timestamp. Then it will read a byte string from the client, (maximum 1024
 bytes) and send it to the destination sensor or board via SPI. The data read from the device
-will be written to the TCP stream, and sent to the client, followed by the string "End\n". The
+will be written to the TCP stream, and sent to the client, followed by the string "End\\n". The
 server relies on the client to close the connection. However, only a queue of 5 connections
 is accepted, so clients will be kicked out if the queue is full.
 
